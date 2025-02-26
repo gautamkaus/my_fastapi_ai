@@ -83,21 +83,32 @@ function processInput(input) {
 // Send user input to the backend
 async function sendToBackend(input, signal) {
   try {
+    const formData = new FormData();
+    formData.append("text", input);
+
+    // If the input is from voice, send the recorded audio file
+    if (recognition && recognition.audioBlob) {
+      formData.append("audio_file", recognition.audioBlob, "user_audio.wav");
+    }
+
     const response = await fetch("http://127.0.0.1:8000/process_voice", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: `text=${input}`, // Send the recognized text as form data
-      signal, // Pass the AbortSignal to the fetch request
+      body: formData,
+      signal,
     });
 
     if (!response.ok) {
-      // Handle errors
+      const errorData = await response.json(); // Parse error response
+      throw new Error(errorData.detail || "Failed to fetch response from the backend.");
     }
 
     const data = await response.json();
     responseText.textContent = data.text_response; // Display the response text
+
+    // Check if audio_response is defined
+    if (!data.audio_response) {
+      throw new Error("No audio response received from the backend.");
+    }
 
     // Load audio from server endpoint
     const audioUrl = `http://127.0.0.1:8000/audio/${data.audio_response}`;
@@ -112,7 +123,7 @@ async function sendToBackend(input, signal) {
       console.log("Request aborted");
     } else {
       console.error("Error:", error);
-      responseText.textContent = "Error: Could not fetch response from the backend.";
+      responseText.textContent = `Error: ${error.message}`;
     }
   } finally {
     isProcessing = false; // Reset processing state
@@ -120,7 +131,6 @@ async function sendToBackend(input, signal) {
     abortController = null; // Reset the AbortController
   }
 }
-
 // Example function to load and play audio
 async function loadAndPlayAudio(url) {
   try {
