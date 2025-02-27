@@ -4,7 +4,14 @@
 
 This project is a voice and text-based personal AI assistant called Dollar, built using FastAPI, OpenAI, SpeechRecognition, and pyttsx3. It allows users to interact with an AI assistant via text or voice, get responses, and have those responses spoken back to them. User interactions are stored in a PostgreSQL database.
 ## Explanation Tutorial
-**https://drive.google.com/drive/folders/1BxvAnGcWxXpbnwQn8lh1t3Uty29bpeir?usp=sharing**
+**https://drive.google.com/drive/folders/1BxvAnGcWxXpbnwQn8lh1t3Uty29bpeir?usp=drive_link**
+
+## Pictorial Representation
+![_- visual selection (1)](https://github.com/user-attachments/assets/2b4a8258-0e19-40ab-8f9c-c35e627b1155)
+
+![_- visual selection](https://github.com/user-attachments/assets/36ea3e1d-99c9-455b-b3d5-ed0bed50e3ec)
+
+
 ## Features
 
 *   **Text and Voice Input:** Users can interact with the AI using either text or voice commands.
