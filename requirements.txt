@@ -3,6 +3,7 @@ fastapi==0.115.8
 openai==1.64.0
 pydantic==2.10.6
 python-dotenv==1.0.1
+psycopg2==2.9.10
 pyttsx3==2.98
 SpeechRecognition==3.14.1
 SQLAlchemy==2.0.38
