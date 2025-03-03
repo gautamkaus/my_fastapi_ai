@@ -81,7 +81,7 @@ def voice_to_text(audio_file_path: str) -> str:
 
 # Fetch response from OpenRouter API asynchronously
 async def get_openai_response(prompt: str) -> str:
-
+    
     # Fetch the API key from environment variables
     api_key = os.getenv("OPENROUTER_API_KEY")
     if not api_key:
@@ -91,26 +91,25 @@ async def get_openai_response(prompt: str) -> str:
         # Initialize the OpenAI client with custom base URL
         client = OpenAI(
             api_key=api_key,
-            base_url="https://beta.sree.shop/v1"
+            base_url="https://api.sree.shop/v1"
         )
 
         # Create a completion using the OpenAI client
         completion = client.chat.completions.create(
-            model="Provider-4/DeepSeekV3",
+            model="gpt-4o",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
             ],
-            stream=True  # Set to True if you want streaming responses
+            stream=False  # Ensure streaming is disabled
         )
 
-        # Handle streaming response
-        response = ""
-        for chunk in completion:
+        # Handle non-streaming response
+        if not completion.choices or len(completion.choices) == 0:
+            raise HTTPException(status_code=500, detail="Invalid API response: No choices found")
 
-            # Check if the chunk contains valid content
-            if chunk.choices and len(chunk.choices) > 0 and chunk.choices[0].delta.content:
-                response += chunk.choices[0].delta.content
+        # Extract the response content
+        response = completion.choices[0].message.content
 
         # Check if the response is empty
         if not response:
