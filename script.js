@@ -91,7 +91,7 @@ async function sendToBackend(input, signal) {
       formData.append("audio_file", recognition.audioBlob, "user_audio.wav");
     }
 
-    const response = await fetch("http://127.0.0.1:8000/process_voice", {
+    const response = await fetch("https://dollar-ai.onrender.com/process_voice", {
       method: "POST",
       body: formData,
       signal,
@@ -111,7 +111,7 @@ async function sendToBackend(input, signal) {
     }
 
     // Load audio from server endpoint
-    const audioUrl = `http://127.0.0.1:8000/audio/${data.audio_response}`;
+    const audioUrl = `https://dollar-ai.onrender.com/audio/${data.audio_response}`;
     loadAndPlayAudio(audioUrl);
 
     // Synthesize the response text to speech
